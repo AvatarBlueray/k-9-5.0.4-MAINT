@@ -1,0 +1,2191 @@
+From 5de10c4e916dcfbf8c94a56312711b6308ab557d Mon Sep 17 00:00:00 2001
+From: Avatar <AvatarBlueray@gmail.com>
+Date: Sun, 15 Feb 2015 17:43:40 +0200
+Subject: [PATCH 1/3] =?UTF-8?q?=D1=82=D0=BE=D0=BF=D0=BE=D1=80=20=D1=83?=
+ =?UTF-8?q?=D0=B2=D0=B0=D1=80=D0=B8=D0=BB=D1=81=D1=8F?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ AndroidManifest.xml                                |  10 +-
+ manifest-merger-release-report.txt                 | 678 +++++++++++++++++++++
+ res/layout/note_edit.xml                           | 101 +++
+ res/layout/notes_list.xml                          |  13 +
+ res/layout/notes_row.xml                           |   5 +
+ res/menu/accounts_option.xml                       |   4 +
+ res/values/strings.xml                             |  16 +
+ src/com/fsck/k9/activity/Accounts.java             |  10 +
+ .../fsck/k9/controller/MessagingController.java    |  48 +-
+ src/com/fsck/k9/spam_filter/NoteEdit.java          | 165 +++++
+ src/com/fsck/k9/spam_filter/Notepadv3.java         | 153 +++++
+ src/com/fsck/k9/spam_filter/NotesDbAdapter.java    | 209 +++++++
+ .../fsck/k9/spam_filter/spam_filter_db_helper.java | 133 ++++
+ 13 files changed, 1539 insertions(+), 6 deletions(-)
+ create mode 100644 manifest-merger-release-report.txt
+ create mode 100644 res/layout/note_edit.xml
+ create mode 100644 res/layout/notes_list.xml
+ create mode 100644 res/layout/notes_row.xml
+ create mode 100644 src/com/fsck/k9/spam_filter/NoteEdit.java
+ create mode 100644 src/com/fsck/k9/spam_filter/Notepadv3.java
+ create mode 100644 src/com/fsck/k9/spam_filter/NotesDbAdapter.java
+ create mode 100644 src/com/fsck/k9/spam_filter/spam_filter_db_helper.java
+
+diff --git a/AndroidManifest.xml b/AndroidManifest.xml
+index 7995819..99f5f97 100644
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -283,8 +283,14 @@
+             </intent-filter>
+         </activity>
+         <activity
+-            android:name=".activity.AccessibleEmailContentActivity"
+-            >
++        android:name=".activity.AccessibleEmailContentActivity"
++        >
++    </activity>
++        <activity
++            android:name=".spam_filter.Notepadv3" >
++        </activity>
++        <activity
++            android:name=".spam_filter.NoteEdit" >
+         </activity>
+         <activity android:name=".activity.EmailAddressList"
+             android:configChanges="locale"
+diff --git a/manifest-merger-release-report.txt b/manifest-merger-release-report.txt
+new file mode 100644
+index 0000000..a7cd8ec
+--- /dev/null
++++ b/manifest-merger-release-report.txt
+@@ -0,0 +1,678 @@
++-- Merging decision tree log ---
++manifest
++ADDED from AndroidManifest.xml:2:1
++	xmlns:android
++		ADDED from AndroidManifest.xml:3:5
++	package
++		ADDED from AndroidManifest.xml:5:33
++	android:versionName
++		ADDED from AndroidManifest.xml:5:5
++	android:versionCode
++		ADDED from AndroidManifest.xml:4:5
++		INJECTED from AndroidManifest.xml:0:0
++		INJECTED from AndroidManifest.xml:0:0
++uses-sdk
++ADDED from AndroidManifest.xml:7:5
++MERGED from k-9-5.0-MAINT.plugins.Android-PullToRefresh:library:unspecified:7:5
++MERGED from k-9-5.0-MAINT.plugins.ckChangeLog:library:unspecified:7:5
++MERGED from k-9-5.0-MAINT.plugins:HoloColorPicker:unspecified:7:5
++MERGED from k-9-5.0-MAINT.plugins:openpgp-api-library:unspecified:7:5
++	android:targetSdkVersion
++		ADDED from AndroidManifest.xml:9:8
++	android:minSdkVersion
++		ADDED from AndroidManifest.xml:8:8
++supports-screens
++ADDED from AndroidManifest.xml:11:5
++	android:largeScreens
++		ADDED from AndroidManifest.xml:12:9
++	android:anyDensity
++		ADDED from AndroidManifest.xml:15:9
++	android:normalScreens
++		ADDED from AndroidManifest.xml:13:9
++	android:smallScreens
++		ADDED from AndroidManifest.xml:14:9
++uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
++ADDED from AndroidManifest.xml:17:5
++	android:name
++		ADDED from AndroidManifest.xml:17:22
++uses-permission#android.permission.READ_CONTACTS
++ADDED from AndroidManifest.xml:18:5
++	android:name
++		ADDED from AndroidManifest.xml:18:22
++uses-permission#android.permission.READ_SYNC_SETTINGS
++ADDED from AndroidManifest.xml:19:5
++	android:name
++		ADDED from AndroidManifest.xml:19:22
++uses-permission#android.permission.WRITE_CONTACTS
++ADDED from AndroidManifest.xml:22:5
++	android:name
++		ADDED from AndroidManifest.xml:22:22
++uses-permission#android.permission.ACCESS_NETWORK_STATE
++ADDED from AndroidManifest.xml:24:5
++	android:name
++		ADDED from AndroidManifest.xml:24:22
++uses-permission#android.permission.INTERNET
++ADDED from AndroidManifest.xml:25:5
++	android:name
++		ADDED from AndroidManifest.xml:25:22
++uses-permission#android.permission.VIBRATE
++ADDED from AndroidManifest.xml:26:5
++	android:name
++		ADDED from AndroidManifest.xml:26:22
++uses-permission#android.permission.WAKE_LOCK
++ADDED from AndroidManifest.xml:27:5
++	android:name
++		ADDED from AndroidManifest.xml:27:22
++uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
++ADDED from AndroidManifest.xml:28:5
++	android:name
++		ADDED from AndroidManifest.xml:28:22
++uses-permission#org.thialfihar.android.apg.permission.READ_KEY_DETAILS
++ADDED from AndroidManifest.xml:30:5
++	android:name
++		ADDED from AndroidManifest.xml:30:22
++permission#com.fsck.k9.permission.READ_ATTACHMENT
++ADDED from AndroidManifest.xml:32:5
++	android:label
++		ADDED from AndroidManifest.xml:35:17
++	android:protectionLevel
++		ADDED from AndroidManifest.xml:34:17
++	android:description
++		ADDED from AndroidManifest.xml:36:17
++	android:permissionGroup
++		ADDED from AndroidManifest.xml:33:17
++	android:name
++		ADDED from AndroidManifest.xml:32:17
++uses-permission#com.fsck.k9.permission.READ_ATTACHMENT
++ADDED from AndroidManifest.xml:37:5
++	android:name
++		ADDED from AndroidManifest.xml:37:22
++permission#com.fsck.k9.permission.REMOTE_CONTROL
++ADDED from AndroidManifest.xml:38:5
++	android:label
++		ADDED from AndroidManifest.xml:41:18
++	android:protectionLevel
++		ADDED from AndroidManifest.xml:40:18
++	android:description
++		ADDED from AndroidManifest.xml:42:18
++	android:permissionGroup
++		ADDED from AndroidManifest.xml:39:18
++	android:name
++		ADDED from AndroidManifest.xml:38:17
++uses-permission#com.fsck.k9.permission.REMOTE_CONTROL
++ADDED from AndroidManifest.xml:43:5
++	android:name
++		ADDED from AndroidManifest.xml:43:22
++permission#com.fsck.k9.permission.READ_MESSAGES
++ADDED from AndroidManifest.xml:44:5
++	android:label
++		ADDED from AndroidManifest.xml:47:17
++	android:protectionLevel
++		ADDED from AndroidManifest.xml:46:17
++	android:description
++		ADDED from AndroidManifest.xml:48:17
++	android:permissionGroup
++		ADDED from AndroidManifest.xml:45:17
++	android:name
++		ADDED from AndroidManifest.xml:44:17
++uses-permission#com.fsck.k9.permission.READ_MESSAGES
++ADDED from AndroidManifest.xml:49:5
++	android:name
++		ADDED from AndroidManifest.xml:49:22
++permission#com.fsck.k9.permission.DELETE_MESSAGES
++ADDED from AndroidManifest.xml:50:5
++	android:label
++		ADDED from AndroidManifest.xml:53:17
++	android:protectionLevel
++		ADDED from AndroidManifest.xml:52:17
++	android:description
++		ADDED from AndroidManifest.xml:54:17
++	android:permissionGroup
++		ADDED from AndroidManifest.xml:51:17
++	android:name
++		ADDED from AndroidManifest.xml:50:17
++uses-permission#com.fsck.k9.permission.DELETE_MESSAGES
++ADDED from AndroidManifest.xml:55:5
++	android:name
++		ADDED from AndroidManifest.xml:55:22
++uses-feature#android.hardware.touchscreen
++ADDED from AndroidManifest.xml:56:5
++	android:required
++		ADDED from AndroidManifest.xml:56:63
++	android:name
++		ADDED from AndroidManifest.xml:56:19
++application
++ADDED from AndroidManifest.xml:57:5
++MERGED from k-9-5.0-MAINT.plugins.Android-PullToRefresh:library:unspecified:9:5
++MERGED from k-9-5.0-MAINT.plugins.ckChangeLog:library:unspecified:11:5
++MERGED from k-9-5.0-MAINT.plugins:openpgp-api-library:unspecified:11:5
++	android:label
++		ADDED from AndroidManifest.xml:59:9
++	android:icon
++		ADDED from AndroidManifest.xml:58:9
++	android:theme
++		ADDED from AndroidManifest.xml:62:9
++	android:allowTaskReparenting
++		ADDED from AndroidManifest.xml:61:9
++	android:name
++		ADDED from AndroidManifest.xml:60:9
++meta-data#android.app.default_searchable
++ADDED from AndroidManifest.xml:64:9
++	android:name
++		ADDED from AndroidManifest.xml:64:20
++	android:value
++		ADDED from AndroidManifest.xml:65:20
++activity#com.fsck.k9.activity.Accounts
++ADDED from AndroidManifest.xml:67:9
++	android:label
++		ADDED from AndroidManifest.xml:72:13
++	android:uiOptions
++		ADDED from AndroidManifest.xml:71:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:69:13
++	android:name
++		ADDED from AndroidManifest.xml:68:13
++	android:launchMode
++		ADDED from AndroidManifest.xml:70:13
++intent-filter#android.intent.action.MAIN+android.intent.category.DEFAULT+android.intent.category.LAUNCHER
++ADDED from AndroidManifest.xml:73:13
++action#android.intent.action.MAIN
++ADDED from AndroidManifest.xml:74:17
++	android:name
++		ADDED from AndroidManifest.xml:74:25
++category#android.intent.category.DEFAULT
++ADDED from AndroidManifest.xml:75:17
++	android:name
++		ADDED from AndroidManifest.xml:75:27
++category#android.intent.category.LAUNCHER
++ADDED from AndroidManifest.xml:76:17
++	android:name
++		ADDED from AndroidManifest.xml:76:27
++intent-filter#android.intent.action.VIEW+android.intent.category.BROWSABLE+android.intent.category.DEFAULT
++ADDED from AndroidManifest.xml:78:13
++action#android.intent.action.VIEW
++ADDED from AndroidManifest.xml:79:17
++	android:name
++		ADDED from AndroidManifest.xml:79:25
++data
++ADDED from AndroidManifest.xml:80:17
++	android:mimeType
++		ADDED from AndroidManifest.xml:80:23
++category#android.intent.category.BROWSABLE
++ADDED from AndroidManifest.xml:82:17
++	android:name
++		ADDED from AndroidManifest.xml:82:27
++activity#com.fsck.k9.activity.setup.Prefs
++ADDED from AndroidManifest.xml:86:9
++	android:label
++		ADDED from AndroidManifest.xml:88:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:89:13
++	android:excludeFromRecents
++		ADDED from AndroidManifest.xml:91:13
++	android:taskAffinity
++		ADDED from AndroidManifest.xml:90:13
++	android:name
++		ADDED from AndroidManifest.xml:87:13
++activity#com.fsck.k9.activity.setup.WelcomeMessage
++ADDED from AndroidManifest.xml:94:9
++	android:label
++		ADDED from AndroidManifest.xml:96:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:97:13
++	android:name
++		ADDED from AndroidManifest.xml:95:13
++activity#com.fsck.k9.activity.setup.FontSizeSettings
++ADDED from AndroidManifest.xml:100:9
++	android:label
++		ADDED from AndroidManifest.xml:102:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:103:13
++	android:name
++		ADDED from AndroidManifest.xml:101:13
++activity#com.fsck.k9.activity.setup.AccountSetupBasics
++ADDED from AndroidManifest.xml:106:9
++	android:label
++		ADDED from AndroidManifest.xml:108:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:109:13
++	android:name
++		ADDED from AndroidManifest.xml:107:13
++activity#com.fsck.k9.activity.setup.AccountSetupAccountType
++ADDED from AndroidManifest.xml:112:9
++	android:label
++		ADDED from AndroidManifest.xml:114:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:115:13
++	android:name
++		ADDED from AndroidManifest.xml:113:13
++activity#com.fsck.k9.activity.setup.AccountSetupIncoming
++ADDED from AndroidManifest.xml:118:9
++	android:label
++		ADDED from AndroidManifest.xml:120:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:121:13
++	android:name
++		ADDED from AndroidManifest.xml:119:13
++activity#com.fsck.k9.activity.setup.AccountSetupComposition
++ADDED from AndroidManifest.xml:124:9
++	android:label
++		ADDED from AndroidManifest.xml:126:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:127:13
++	android:name
++		ADDED from AndroidManifest.xml:125:13
++activity#com.fsck.k9.activity.setup.AccountSetupOutgoing
++ADDED from AndroidManifest.xml:130:9
++	android:label
++		ADDED from AndroidManifest.xml:132:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:133:13
++	android:name
++		ADDED from AndroidManifest.xml:131:13
++activity#com.fsck.k9.activity.setup.AccountSetupOptions
++ADDED from AndroidManifest.xml:136:9
++	android:label
++		ADDED from AndroidManifest.xml:138:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:139:13
++	android:name
++		ADDED from AndroidManifest.xml:137:13
++activity#com.fsck.k9.activity.setup.AccountSetupNames
++ADDED from AndroidManifest.xml:142:9
++	android:label
++		ADDED from AndroidManifest.xml:144:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:145:13
++	android:name
++		ADDED from AndroidManifest.xml:143:13
++activity#com.fsck.k9.activity.ChooseFolder
++ADDED from AndroidManifest.xml:148:9
++	android:noHistory
++		ADDED from AndroidManifest.xml:153:13
++	android:label
++		ADDED from AndroidManifest.xml:151:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:152:13
++	android:theme
++		ADDED from AndroidManifest.xml:150:13
++	android:name
++		ADDED from AndroidManifest.xml:149:13
++activity#com.fsck.k9.activity.ChooseIdentity
++ADDED from AndroidManifest.xml:156:9
++	android:label
++		ADDED from AndroidManifest.xml:159:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:160:13
++	android:theme
++		ADDED from AndroidManifest.xml:158:13
++	android:name
++		ADDED from AndroidManifest.xml:157:13
++activity#com.fsck.k9.activity.ManageIdentities
++ADDED from AndroidManifest.xml:163:9
++	android:label
++		ADDED from AndroidManifest.xml:165:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:166:13
++	android:name
++		ADDED from AndroidManifest.xml:164:13
++activity#com.fsck.k9.activity.EditIdentity
++ADDED from AndroidManifest.xml:169:9
++	android:label
++		ADDED from AndroidManifest.xml:171:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:172:13
++	android:name
++		ADDED from AndroidManifest.xml:170:13
++activity#com.fsck.k9.activity.NotificationDeleteConfirmation
++ADDED from AndroidManifest.xml:175:9
++	android:theme
++		ADDED from AndroidManifest.xml:177:13
++	android:excludeFromRecents
++		ADDED from AndroidManifest.xml:180:13
++	android:taskAffinity
++		ADDED from AndroidManifest.xml:179:13
++	android:name
++		ADDED from AndroidManifest.xml:176:13
++	android:launchMode
++		ADDED from AndroidManifest.xml:178:13
++activity#com.fsck.k9.activity.setup.AccountSetupCheckSettings
++ADDED from AndroidManifest.xml:185:9
++	android:label
++		ADDED from AndroidManifest.xml:187:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:188:13
++	android:name
++		ADDED from AndroidManifest.xml:186:13
++activity#com.fsck.k9.activity.setup.AccountSettings
++ADDED from AndroidManifest.xml:191:9
++	android:label
++		ADDED from AndroidManifest.xml:193:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:194:13
++	android:name
++		ADDED from AndroidManifest.xml:192:13
++activity#com.fsck.k9.activity.setup.FolderSettings
++ADDED from AndroidManifest.xml:198:9
++	android:label
++		ADDED from AndroidManifest.xml:201:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:202:13
++	android:theme
++		ADDED from AndroidManifest.xml:200:13
++	android:name
++		ADDED from AndroidManifest.xml:199:13
++activity#com.fsck.k9.activity.FolderList
++ADDED from AndroidManifest.xml:205:9
++	android:uiOptions
++		ADDED from AndroidManifest.xml:208:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:207:13
++	android:name
++		ADDED from AndroidManifest.xml:206:13
++intent-filter#android.intent.action.MAIN
++ADDED from AndroidManifest.xml:210:13
++activity#com.fsck.k9.activity.MessageList
++ADDED from AndroidManifest.xml:215:9
++	android:uiOptions
++		ADDED from AndroidManifest.xml:219:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:217:13
++	android:name
++		ADDED from AndroidManifest.xml:216:13
++	android:launchMode
++		ADDED from AndroidManifest.xml:218:13
++intent-filter#android.intent.action.VIEW+android.intent.category.DEFAULT
++ADDED from AndroidManifest.xml:225:13
++activity#com.fsck.k9.activity.MessageCompose
++ADDED from AndroidManifest.xml:234:9
++	android:label
++		ADDED from AndroidManifest.xml:236:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:238:13
++	android:enabled
++		ADDED from AndroidManifest.xml:237:13
++	android:name
++		ADDED from AndroidManifest.xml:235:13
++intent-filter#android.intent.action.SENDTO+android.intent.category.DEFAULT
++ADDED from AndroidManifest.xml:240:13
++action#android.intent.action.SENDTO
++ADDED from AndroidManifest.xml:241:17
++	android:name
++		ADDED from AndroidManifest.xml:241:25
++intent-filter#android.intent.action.SEND+android.intent.category.DEFAULT
++ADDED from AndroidManifest.xml:245:13
++action#android.intent.action.SEND
++ADDED from AndroidManifest.xml:246:17
++	android:name
++		ADDED from AndroidManifest.xml:246:25
++intent-filter#android.intent.action.SEND_MULTIPLE+android.intent.category.DEFAULT
++ADDED from AndroidManifest.xml:250:13
++action#android.intent.action.SEND_MULTIPLE
++ADDED from AndroidManifest.xml:251:17
++	android:name
++		ADDED from AndroidManifest.xml:251:25
++activity#com.fsck.k9.activity.Search
++ADDED from AndroidManifest.xml:263:9
++	android:label
++		ADDED from AndroidManifest.xml:264:19
++	android:uiOptions
++		ADDED from AndroidManifest.xml:266:19
++	android:configChanges
++		ADDED from AndroidManifest.xml:265:19
++	android:name
++		ADDED from AndroidManifest.xml:263:19
++intent-filter#android.intent.action.SEARCH+android.intent.category.DEFAULT
++ADDED from AndroidManifest.xml:268:13
++action#android.intent.action.SEARCH
++ADDED from AndroidManifest.xml:269:17
++	android:name
++		ADDED from AndroidManifest.xml:269:25
++meta-data#android.app.searchable
++ADDED from AndroidManifest.xml:272:13
++	android:resource
++		ADDED from AndroidManifest.xml:273:24
++	android:name
++		ADDED from AndroidManifest.xml:272:24
++activity#com.fsck.k9.activity.LauncherShortcuts
++ADDED from AndroidManifest.xml:275:9
++	android:label
++		ADDED from AndroidManifest.xml:277:13
++	android:configChanges
++		ADDED from AndroidManifest.xml:278:13
++	android:name
++		ADDED from AndroidManifest.xml:276:13
++intent-filter#android.intent.action.CREATE_SHORTCUT+android.intent.category.DEFAULT
++ADDED from AndroidManifest.xml:280:13
++action#android.intent.action.CREATE_SHORTCUT
++ADDED from AndroidManifest.xml:281:17
++	android:name
++		ADDED from AndroidManifest.xml:281:25
++activity#com.fsck.k9.activity.AccessibleEmailContentActivity
++ADDED from AndroidManifest.xml:285:9
++	android:name
++		ADDED from AndroidManifest.xml:286:9
++activity#com.fsck.k9.spam_filter.Notepadv3
++ADDED from AndroidManifest.xml:289:9
++	android:name
++		ADDED from AndroidManifest.xml:290:13
++activity#com.fsck.k9.spam_filter.NoteEdit
++ADDED from AndroidManifest.xml:292:9
++	android:name
++		ADDED from AndroidManifest.xml:293:13
++activity#com.fsck.k9.activity.EmailAddressList
++ADDED from AndroidManifest.xml:295:9
++	android:configChanges
++		ADDED from AndroidManifest.xml:296:13
++	android:name
++		ADDED from AndroidManifest.xml:295:19
++receiver#com.fsck.k9.service.BootReceiver
++ADDED from AndroidManifest.xml:299:9
++	android:enabled
++		ADDED from AndroidManifest.xml:300:15
++	android:name
++		ADDED from AndroidManifest.xml:299:19
++intent-filter#android.intent.action.BOOT_COMPLETED
++ADDED from AndroidManifest.xml:302:13
++action#android.intent.action.BOOT_COMPLETED
++ADDED from AndroidManifest.xml:303:17
++	android:name
++		ADDED from AndroidManifest.xml:303:25
++intent-filter#android.intent.action.DEVICE_STORAGE_LOW
++ADDED from AndroidManifest.xml:305:13
++action#android.intent.action.DEVICE_STORAGE_LOW
++ADDED from AndroidManifest.xml:306:17
++	android:name
++		ADDED from AndroidManifest.xml:306:25
++intent-filter#android.intent.action.DEVICE_STORAGE_OK
++ADDED from AndroidManifest.xml:308:13
++action#android.intent.action.DEVICE_STORAGE_OK
++ADDED from AndroidManifest.xml:309:17
++	android:name
++		ADDED from AndroidManifest.xml:309:25
++intent-filter#android.net.conn.CONNECTIVITY_CHANGE
++ADDED from AndroidManifest.xml:311:13
++action#android.net.conn.CONNECTIVITY_CHANGE
++ADDED from AndroidManifest.xml:312:17
++	android:name
++		ADDED from AndroidManifest.xml:312:25
++intent-filter#android.net.conn.BACKGROUND_DATA_SETTING_CHANGED
++ADDED from AndroidManifest.xml:314:13
++action#android.net.conn.BACKGROUND_DATA_SETTING_CHANGED
++ADDED from AndroidManifest.xml:315:17
++	android:name
++		ADDED from AndroidManifest.xml:315:25
++intent-filter#com.android.sync.SYNC_CONN_STATUS_CHANGED
++ADDED from AndroidManifest.xml:317:13
++action#com.android.sync.SYNC_CONN_STATUS_CHANGED
++ADDED from AndroidManifest.xml:318:17
++	android:name
++		ADDED from AndroidManifest.xml:318:25
++intent-filter#com.fsck.k9.service.BroadcastReceiver.scheduleIntent
++ADDED from AndroidManifest.xml:320:15
++action#com.fsck.k9.service.BroadcastReceiver.scheduleIntent
++ADDED from AndroidManifest.xml:321:17
++	android:name
++		ADDED from AndroidManifest.xml:321:25
++receiver#com.fsck.k9.service.RemoteControlReceiver
++ADDED from AndroidManifest.xml:324:9
++	android:enabled
++		ADDED from AndroidManifest.xml:325:16
++	android:permission
++		ADDED from AndroidManifest.xml:326:16
++	android:name
++		ADDED from AndroidManifest.xml:324:19
++intent-filter#com.fsck.k9.K9RemoteControl.set
++ADDED from AndroidManifest.xml:328:16
++action#com.fsck.k9.K9RemoteControl.set
++ADDED from AndroidManifest.xml:329:18
++	android:name
++		ADDED from AndroidManifest.xml:329:26
++intent-filter#com.fsck.k9.K9RemoteControl.requestAccounts
++ADDED from AndroidManifest.xml:332:14
++action#com.fsck.k9.K9RemoteControl.requestAccounts
++ADDED from AndroidManifest.xml:333:17
++	android:name
++		ADDED from AndroidManifest.xml:333:25
++receiver#com.fsck.k9.service.CoreReceiver
++ADDED from AndroidManifest.xml:337:9
++	android:enabled
++		ADDED from AndroidManifest.xml:338:15
++	android:name
++		ADDED from AndroidManifest.xml:337:19
++intent-filter#com.fsck.k9.service.CoreReceiver.wakeLockRelease
++ADDED from AndroidManifest.xml:340:15
++action#com.fsck.k9.service.CoreReceiver.wakeLockRelease
++ADDED from AndroidManifest.xml:341:17
++	android:name
++		ADDED from AndroidManifest.xml:341:25
++receiver#com.fsck.k9.service.StorageReceiver
++ADDED from AndroidManifest.xml:344:9
++	android:enabled
++		ADDED from AndroidManifest.xml:345:15
++	android:name
++		ADDED from AndroidManifest.xml:344:19
++intent-filter#android.intent.action.MEDIA_MOUNTED
++ADDED from AndroidManifest.xml:347:13
++action#android.intent.action.MEDIA_MOUNTED
++ADDED from AndroidManifest.xml:357:17
++	android:name
++		ADDED from AndroidManifest.xml:357:25
++service#com.fsck.k9.service.MailService
++ADDED from AndroidManifest.xml:367:9
++	android:enabled
++		ADDED from AndroidManifest.xml:369:13
++	android:name
++		ADDED from AndroidManifest.xml:368:13
++service#com.fsck.k9.service.NotificationActionService
++ADDED from AndroidManifest.xml:372:9
++	android:enabled
++		ADDED from AndroidManifest.xml:374:13
++	android:name
++		ADDED from AndroidManifest.xml:373:13
++service#com.fsck.k9.service.PushService
++ADDED from AndroidManifest.xml:377:9
++	android:enabled
++		ADDED from AndroidManifest.xml:379:14
++	android:name
++		ADDED from AndroidManifest.xml:378:14
++service#com.fsck.k9.service.PollService
++ADDED from AndroidManifest.xml:382:10
++	android:enabled
++		ADDED from AndroidManifest.xml:384:14
++	android:name
++		ADDED from AndroidManifest.xml:383:14
++service#com.fsck.k9.service.RemoteControlService
++ADDED from AndroidManifest.xml:387:10
++	android:enabled
++		ADDED from AndroidManifest.xml:389:15
++	android:permission
++		ADDED from AndroidManifest.xml:390:15
++	android:name
++		ADDED from AndroidManifest.xml:388:15
++service#com.fsck.k9.service.SleepService
++ADDED from AndroidManifest.xml:393:10
++	android:enabled
++		ADDED from AndroidManifest.xml:395:14
++	android:name
++		ADDED from AndroidManifest.xml:394:14
++provider#com.fsck.k9.provider.AttachmentProvider
++ADDED from AndroidManifest.xml:398:9
++	android:grantUriPermissions
++		ADDED from AndroidManifest.xml:402:13
++	android:multiprocess
++		ADDED from AndroidManifest.xml:401:13
++	android:exported
++		ADDED from AndroidManifest.xml:404:13
++	android:authorities
++		ADDED from AndroidManifest.xml:400:13
++	android:readPermission
++		ADDED from AndroidManifest.xml:403:13
++	android:name
++		ADDED from AndroidManifest.xml:399:13
++provider#com.fsck.k9.provider.MessageProvider
++ADDED from AndroidManifest.xml:406:9
++	android:grantUriPermissions
++		ADDED from AndroidManifest.xml:410:13
++	android:multiprocess
++		ADDED from AndroidManifest.xml:409:13
++	android:exported
++		ADDED from AndroidManifest.xml:413:13
++	android:authorities
++		ADDED from AndroidManifest.xml:408:13
++	android:readPermission
++		ADDED from AndroidManifest.xml:411:13
++	android:name
++		ADDED from AndroidManifest.xml:407:13
++	android:writePermission
++		ADDED from AndroidManifest.xml:412:13
++provider#com.fsck.k9.provider.EmailProvider
++ADDED from AndroidManifest.xml:415:9
++	android:exported
++		ADDED from AndroidManifest.xml:418:13
++	android:authorities
++		ADDED from AndroidManifest.xml:417:13
++	android:name
++		ADDED from AndroidManifest.xml:416:13
++receiver#com.fsck.k9.provider.UnreadWidgetProvider
++ADDED from AndroidManifest.xml:421:9
++	android:label
++		ADDED from AndroidManifest.xml:423:13
++	android:icon
++		ADDED from AndroidManifest.xml:424:13
++	android:name
++		ADDED from AndroidManifest.xml:422:13
++intent-filter#android.appwidget.action.APPWIDGET_UPDATE
++ADDED from AndroidManifest.xml:425:13
++action#android.appwidget.action.APPWIDGET_UPDATE
++ADDED from AndroidManifest.xml:426:17
++	android:name
++		ADDED from AndroidManifest.xml:426:25
++meta-data#android.appwidget.provider
++ADDED from AndroidManifest.xml:428:13
++	android:resource
++		ADDED from AndroidManifest.xml:430:17
++	android:name
++		ADDED from AndroidManifest.xml:429:17
++activity#com.fsck.k9.activity.UnreadWidgetConfiguration
++ADDED from AndroidManifest.xml:432:9
++	android:name
++		ADDED from AndroidManifest.xml:432:19
++intent-filter#android.appwidget.action.APPWIDGET_CONFIGURE
++ADDED from AndroidManifest.xml:433:13
++action#android.appwidget.action.APPWIDGET_CONFIGURE
++ADDED from AndroidManifest.xml:434:17
++	android:name
++		ADDED from AndroidManifest.xml:434:25
++activity#com.fsck.k9.activity.UpgradeDatabases
++ADDED from AndroidManifest.xml:437:9
++	android:label
++		ADDED from AndroidManifest.xml:439:13
++	android:name
++		ADDED from AndroidManifest.xml:438:13
++service#com.fsck.k9.service.DatabaseUpgradeService
++ADDED from AndroidManifest.xml:441:9
++	android:exported
++		ADDED from AndroidManifest.xml:443:13
++	android:name
++		ADDED from AndroidManifest.xml:442:13
+diff --git a/res/layout/note_edit.xml b/res/layout/note_edit.xml
+new file mode 100644
+index 0000000..c6d7003
+--- /dev/null
++++ b/res/layout/note_edit.xml
+@@ -0,0 +1,101 @@
++<?xml version="1.0" encoding="utf-8"?>
++
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++	android:orientation="vertical" android:layout_width="match_parent"
++	android:layout_height="match_parent">
++	
++	<LinearLayout android:orientation="horizontal"
++		android:layout_width="match_parent"
++		android:layout_height="wrap_content">
++
++		<TextView android:layout_width="wrap_content"
++			android:layout_height="wrap_content" 
++			android:text="@string/spam_filter_title"
++            android:minWidth="45dp" />
++		<EditText android:id="@+id/title" 
++		  android:layout_width="wrap_content"
++			android:layout_height="wrap_content" 
++			android:layout_weight="1"/>
++	</LinearLayout>
++    <LinearLayout android:orientation="horizontal"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content">
++
++        <TextView android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="@string/spam_filter_from"
++            android:minWidth="45dp" />
++        <EditText android:id="@+id/from"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_weight="1"/>
++    </LinearLayout>
++    <LinearLayout android:orientation="horizontal"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content">
++
++        <TextView android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="@string/spam_filter_subj"
++            android:minWidth="45dp" />
++        <EditText android:id="@+id/subj"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_weight="1"/>
++    </LinearLayout>
++
++    <LinearLayout android:orientation="horizontal"
++    android:layout_width="match_parent"
++    android:layout_height="wrap_content">
++    <CheckBox
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:text="@string/spam_filter_hide"
++        android:id="@+id/hide"
++        android:layout_gravity="center_horizontal"
++        android:layout_weight="1" />
++
++    <CheckBox
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:text="@string/spam_filter_del"
++        android:id="@+id/del"
++        android:layout_weight="1" />
++
++    <Button android:id="@+id/confirm"
++        android:text="@string/spam_filter_confirm"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_weight="2" />
++</LinearLayout>
++
++    <LinearLayout android:orientation="vertical"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:layout_weight="1"
++        android:gravity="center|bottom">
++
++        <TextView
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="request at Avatar.blueray@gmail.com"
++            android:id="@+id/textView"
++            android:textSize="20dp"
++            android:textAlignment="center" />
++    </LinearLayout>
++
++    <TextView
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:text="donation copy BTC wallet to clipboard"
++        android:id="@+id/textView2"
++        android:layout_gravity="center_horizontal"
++        android:textSize="20dp" />
++
++    <Button
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:text="1hRm41a1roEBHS7uxF9auvfekUYHvFctF"
++        android:id="@+id/donate"
++        android:layout_gravity="center_horizontal" />
++</LinearLayout>
+\ No newline at end of file
+diff --git a/res/layout/notes_list.xml b/res/layout/notes_list.xml
+new file mode 100644
+index 0000000..8e9d5e6
+--- /dev/null
++++ b/res/layout/notes_list.xml
+@@ -0,0 +1,13 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++      android:layout_width="wrap_content"
++    	android:layout_height="wrap_content">
++    
++    <ListView android:id="@+id/android:list"
++          android:layout_width="wrap_content"
++        	android:layout_height="wrap_content"/>
++  	<TextView android:id="@+id/android:empty"
++          android:layout_width="wrap_content"
++        	android:layout_height="wrap_content"
++        	android:text="@string/spam_filter_no_filter"/>
++</LinearLayout>
+diff --git a/res/layout/notes_row.xml b/res/layout/notes_row.xml
+new file mode 100644
+index 0000000..bd92bd5
+--- /dev/null
++++ b/res/layout/notes_row.xml
+@@ -0,0 +1,5 @@
++<?xml version="1.0" encoding="utf-8"?>
++<TextView android:id="@+id/text1" xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="wrap_content"
++    android:layout_height="wrap_content"
++    android:textSize="30dp" />
+diff --git a/res/menu/accounts_option.xml b/res/menu/accounts_option.xml
+index 0bf8dfc..ff6c12e 100644
+--- a/res/menu/accounts_option.xml
++++ b/res/menu/accounts_option.xml
+@@ -28,6 +28,10 @@
+         android:icon="?attr/iconActionAbout"
+         android:title="@string/about_action"/>
+     <item
++        android:id="@+id/spamfilter"
++        android:icon="?attr/iconActionAbout"
++        android:title="@string/spam_filter_action"/>
++    <item
+         android:id="@+id/import_export"
+         android:icon="?attr/iconActionImportExport"
+         android:title="@string/import_export_action">
+diff --git a/res/values/strings.xml b/res/values/strings.xml
+index 32c764a..3d09945 100644
+--- a/res/values/strings.xml
++++ b/res/values/strings.xml
+@@ -1130,4 +1130,20 @@ Please submit bug reports, contribute new features and ask questions at
+     <string name="client_certificate_retrieval_failure">"Failed to retrieve client certificate for alias \"<xliff:g id="alias">%s</xliff:g>\""</string>
+     <string name="client_certificate_advanced_options">Advanced options</string>
+     <string name="client_certificate_expired">"Client certificate \"<xliff:g id="certificate_alias">%1$s</xliff:g>\" has expired or is not yet valid (<xliff:g id="exception_message">%2$s</xliff:g>)"</string>
++
++    <!-- Spam Filter-->
++    <string name="spam_filter_app_name">Spam Filter</string>
++    <string name="spam_filter_no_filter">No Filters Yet</string>
++    <string name="spam_filter_menu_insert">Add Filter</string>
++    <string name="spam_filter_menu_delete">Delete Filter</string>
++    <string name="spam_filter_title">Title</string>
++    <string name="spam_filter_from">From</string>
++    <string name="spam_filter_subj">Subj</string>
++    <string name="spam_filter_hide">Hide</string>
++    <string name="spam_filter_del">Del</string>
++    <string name="spam_filter_confirm">Confirm</string>
++    <string name="spam_filter_edit_filter">Edit Filter</string>
++    <string name="spam_filter_action">Configure Spam Filter</string>
++    <string name="spam_filter_request">Request at Avatar.Blueray@gmail.com
++    donation BTC copy wallet to clipboard</string>
+ </resources>
+diff --git a/src/com/fsck/k9/activity/Accounts.java b/src/com/fsck/k9/activity/Accounts.java
+index 76cfe3a..3d57925 100644
+--- a/src/com/fsck/k9/activity/Accounts.java
++++ b/src/com/fsck/k9/activity/Accounts.java
+@@ -95,6 +95,8 @@
+ import com.fsck.k9.search.SearchSpecification.Searchfield;
+ import com.fsck.k9.view.ColorChip;
+ 
++import com.fsck.k9.spam_filter.*;
++
+ import de.cketti.library.changelog.ChangeLog;
+ 
+ 
+@@ -1262,6 +1264,9 @@ public boolean onOptionsItemSelected(MenuItem item) {
+         case R.id.about:
+             onAbout();
+             break;
++        case R.id.spamfilter:
++            onSpamfilter();
++            break;
+         case R.id.search:
+             onSearchRequested();
+             break;
+@@ -1288,6 +1293,11 @@ public boolean onOptionsItemSelected(MenuItem item) {
+         new String[] {"HoloColorPicker", "https://github.com/LarsWerkman/HoloColorPicker"}
+     };
+ 
++    private void onSpamfilter() {
++        Intent i = new Intent(this, com.fsck.k9.spam_filter.Notepadv3.class);
++        startActivityForResult(i, 0);
++    }
++
+     private void onAbout() {
+         String appName = getString(R.string.app_name);
+         int year = Calendar.getInstance().get(Calendar.YEAR);
+diff --git a/src/com/fsck/k9/controller/MessagingController.java b/src/com/fsck/k9/controller/MessagingController.java
+index 8c10912..0719014 100644
+--- a/src/com/fsck/k9/controller/MessagingController.java
++++ b/src/com/fsck/k9/controller/MessagingController.java
+@@ -95,6 +95,8 @@
+ import com.fsck.k9.search.SqlQueryBuilder;
+ import com.fsck.k9.service.NotificationActionService;
+ 
++import com.fsck.k9.spam_filter.spam_filter_db_helper;
++
+ 
+ /**
+  * Starts a long running (application) Thread that will run through commands
+@@ -1664,7 +1666,7 @@ public void run() {
+                     }
+                     // Send a notification of this message
+ 
+-                    if (shouldNotifyForMessage(account, localFolder, message)) {
++                    if (shouldNotifyForMessage(account, localFolder, message, localMessage)) {
+                         // Notify with the localMessage so that we don't have to recalculate the content preview.
+                         notifyAccount(mApplication, account, localMessage, unreadBeforeStart);
+                     }
+@@ -1802,7 +1804,7 @@ private void downloadLargeMessages(final Account account, final Folder remoteFol
+             }
+ 
+             // Send a notification of this message
+-            if (shouldNotifyForMessage(account, localFolder, message)) {
++            if (shouldNotifyForMessage(account, localFolder, message, localMessage)) {
+                 // Notify with the localMessage so that we don't have to recalculate the content preview.
+                 notifyAccount(mApplication, account, localMessage, unreadBeforeStart);
+             }
+@@ -1850,7 +1852,7 @@ private void refreshLocalMessageFlags(final Account account, final Folder remote
+                         for (MessagingListener l : getListeners()) {
+                             l.synchronizeMailboxAddOrUpdateMessage(account, folder, localMessage);
+                         }
+-                        if (shouldNotifyForMessage(account, localFolder, localMessage)) {
++                        if (shouldNotifyForMessage(account, localFolder, localMessage, localMessage)) {
+                             shouldBeNotifiedOf = true;
+                         }
+                     }
+@@ -4602,8 +4604,17 @@ public void run() {
+         });
+     }
+ 
++    private long checkForSpam(String from, String subj){
++        spam_filter_db_helper db;
++        db = new spam_filter_db_helper( mApplication.getApplicationContext());
++        long ret = db.checkForSpamGetAction(from,subj);
++        db.closeDB();
++
++        return  ret;
++    }
+ 
+-    private boolean shouldNotifyForMessage(Account account, LocalFolder localFolder, Message message) {
++
++    private boolean shouldNotifyForMessage(Account account, LocalFolder localFolder, Message message, Message localmessage) {
+         // If we don't even have an account name, don't show the notification.
+         // (This happens during initial account setup)
+         if (account.getName() == null) {
+@@ -4672,6 +4683,35 @@ private boolean shouldNotifyForMessage(Account account, LocalFolder localFolder,
+             return false;
+         }
+ 
++        String subj = message.getSubject();
++
++        Log.e(K9.LOG_TAG, "subj is  " + subj);
++
++
++        Address[] address = message.getFrom();
++
++        for (Address adr:address){
++            String from = adr.getAddress();
++
++           // Log.e(K9.LOG_TAG, "subj from  is  " + subj+ "  "+ from);
++
++            long result = checkForSpam(from,subj);
++
++            if (result == spam_filter_db_helper.ACTION_HIDE ){
++               // Log.e(K9.LOG_TAG, "action hide  " );
++                return  false;
++            }
++
++            if (result == spam_filter_db_helper.ACTION_HIDENDEL ){
++              // Log.e(K9.LOG_TAG, "action del  " );
++
++                  deleteMessages(Collections.singletonList(localmessage), null);
++                return  false;
++            }
++
++        }
++
++
+         return true;
+     }
+ 
+diff --git a/src/com/fsck/k9/spam_filter/NoteEdit.java b/src/com/fsck/k9/spam_filter/NoteEdit.java
+new file mode 100644
+index 0000000..15b5e63
+--- /dev/null
++++ b/src/com/fsck/k9/spam_filter/NoteEdit.java
+@@ -0,0 +1,165 @@
++/*
++ * Copyright (C) 2008 Google Inc.
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package com.fsck.k9.spam_filter;
++
++import android.app.Activity;
++import android.content.ClipData;
++import android.content.Context;
++import android.database.Cursor;
++import android.os.Bundle;
++import android.util.Log;
++import android.view.View;
++import android.widget.Button;
++import android.widget.CheckBox;
++import android.widget.EditText;
++
++import com.fsck.k9.K9;
++import com.fsck.k9.R;
++
++public class NoteEdit extends Activity {
++
++    private EditText mTitleText;
++    private EditText mFromText;
++    private EditText mSubjText;
++    private CheckBox mHideCb;
++    private CheckBox mDelCb;
++    private Long mRowId;
++    private NotesDbAdapter mDbHelper;
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        createHelper();
++
++        setContentView(R.layout.note_edit);
++        setTitle(R.string.spam_filter_edit_filter);
++
++        mTitleText = (EditText) findViewById(R.id.title);
++        mFromText = (EditText) findViewById(R.id.from);
++        mSubjText = (EditText) findViewById(R.id.subj);
++
++        mHideCb = (CheckBox) findViewById(R.id.hide);
++        mDelCb = (CheckBox) findViewById(R.id.del);
++
++
++        Button confirmButton = (Button) findViewById(R.id.confirm);
++        Button donteButton = (Button) findViewById(R.id.donate);
++
++
++        mRowId = (savedInstanceState == null) ? null :
++            (Long) savedInstanceState.getSerializable(NotesDbAdapter.KEY_ROWID);
++		if (mRowId == null) {
++			Bundle extras = getIntent().getExtras();
++			mRowId = extras != null ? extras.getLong(NotesDbAdapter.KEY_ROWID)
++									: null;
++		}
++
++		populateFields();
++
++        confirmButton.setOnClickListener(new View.OnClickListener() {
++
++            public void onClick(View view) {
++                setResult(RESULT_OK);
++                finish();
++            }
++
++        });
++
++        donteButton.setOnClickListener(new View.OnClickListener() {
++
++            public void onClick(View view) {
++                android.content.ClipboardManager clipboardManager =
++                        (android.content.ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
++                ClipData clip = ClipData.newPlainText("donate for k9-mail spam filter edition", "1hRm41a1roEBHS7uxF9auvfekUYHvFctF");
++                clipboardManager.setPrimaryClip(clip);
++            }
++
++        });
++    }
++
++    private void createHelper(){
++        if (mDbHelper == null){
++            mDbHelper = new NotesDbAdapter(this);
++            mDbHelper.open();
++        }
++    }
++
++    private void populateFields() {
++        if (mRowId != null) {
++            Cursor note = mDbHelper.fetchNote(mRowId);
++            startManagingCursor(note);
++            mTitleText.setText(note.getString(
++                    note.getColumnIndexOrThrow(NotesDbAdapter.KEY_TITLE)));
++
++            mFromText.setText(note.getString(
++                    note.getColumnIndexOrThrow(NotesDbAdapter.KEY_FROM)));
++            mSubjText.setText(note.getString(
++                    note.getColumnIndexOrThrow(NotesDbAdapter.KEY_SUBJ)));
++
++
++
++            mHideCb.setChecked(note.getInt(note.getColumnIndexOrThrow(NotesDbAdapter.KEY_HIDE)) != 0);
++            mDelCb.setChecked(note.getInt(note.getColumnIndexOrThrow(NotesDbAdapter.KEY_DEL)) != 0);
++        }
++    }
++
++    @Override
++    protected void onSaveInstanceState(Bundle outState) {
++        super.onSaveInstanceState(outState);
++        saveState();
++        outState.putSerializable(NotesDbAdapter.KEY_ROWID, mRowId);
++    }
++
++    @Override
++    protected void onPause() {
++        super.onPause();
++        saveState();
++    }
++
++    @Override
++    protected void onResume() {
++        super.onResume();
++        createHelper();
++
++
++        populateFields();
++    }
++
++    private void saveState() {
++        String title = mTitleText.getText().toString();
++
++        String from = mFromText.getText().toString();
++        String subj = mSubjText.getText().toString();
++
++        long hide = mHideCb.isChecked()? 1:0;
++        long del = mDelCb.isChecked()? 1:0;
++
++        if (mRowId == null) {
++            long id = mDbHelper.createNote(title,from,subj,hide,del);
++            if (id > 0) {
++                mRowId = id;
++            }
++        } else {
++            mDbHelper.updateNote(mRowId, title,from,subj,hide,del);
++        }
++
++        mDbHelper.close();
++        mDbHelper = null;
++
++    }
++
++}
+diff --git a/src/com/fsck/k9/spam_filter/Notepadv3.java b/src/com/fsck/k9/spam_filter/Notepadv3.java
+new file mode 100644
+index 0000000..ac69865
+--- /dev/null
++++ b/src/com/fsck/k9/spam_filter/Notepadv3.java
+@@ -0,0 +1,153 @@
++/*
++ * Copyright (C) 2008 Google Inc.
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package com.fsck.k9.spam_filter;
++
++import android.app.ListActivity;
++import android.content.Intent;
++import android.database.Cursor;
++import android.os.Bundle;
++
++import android.view.ContextMenu;
++import android.view.ContextMenu.ContextMenuInfo;
++import android.view.Menu;
++import android.view.MenuItem;
++import android.view.View;
++import android.widget.AdapterView.AdapterContextMenuInfo;
++import android.widget.ListView;
++import android.widget.SimpleCursorAdapter;
++
++import com.fsck.k9.K9;
++import com.fsck.k9.R;
++
++public class Notepadv3 extends ListActivity {
++    private static final int ACTIVITY_CREATE=0;
++    private static final int ACTIVITY_EDIT=1;
++
++    private static final int INSERT_ID = Menu.FIRST;
++    private static final int DELETE_ID = Menu.FIRST + 1;
++
++    private NotesDbAdapter mDbHelper;
++
++    private void createHelper(){
++        if (mDbHelper == null){
++            mDbHelper = new NotesDbAdapter(this);
++            mDbHelper.open();
++        }
++    }
++
++    /** Called when the activity is first created. */
++    @Override
++    public void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.notes_list);
++        createHelper();
++        fillData();
++        registerForContextMenu(getListView());
++    }
++
++    @Override
++    public void onPause() {
++        super.onPause();  // Always call the superclass method first
++
++    }
++
++    @Override
++    protected void onResume() {
++        super.onResume();
++
++        createHelper();
++
++    }
++
++    @Override
++    public void onStop() {
++        super.onStop();  // Always call the superclass method first
++    }
++
++    private void fillData() {
++        Cursor notesCursor = mDbHelper.fetchAllNotes();
++        startManagingCursor(notesCursor);
++
++        // Create an array to specify the fields we want to display in the list (only TITLE)
++        String[] from = new String[]{NotesDbAdapter.KEY_TITLE};
++
++        // and an array of the fields we want to bind those fields to (in this case just text1)
++        int[] to = new int[]{R.id.text1};
++
++        // Now create a simple cursor adapter and set it to display
++        SimpleCursorAdapter notes =
++            new SimpleCursorAdapter(this, R.layout.notes_row, notesCursor, from, to);
++        setListAdapter(notes);
++    }
++
++    @Override
++    public boolean onCreateOptionsMenu(Menu menu) {
++        super.onCreateOptionsMenu(menu);
++        menu.add(0, INSERT_ID, 0, R.string.spam_filter_menu_insert);
++        return true;
++    }
++
++    @Override
++    public boolean onMenuItemSelected(int featureId, MenuItem item) {
++        switch(item.getItemId()) {
++            case INSERT_ID:
++                createNote();
++                return true;
++        }
++
++        return super.onMenuItemSelected(featureId, item);
++    }
++
++    @Override
++    public void onCreateContextMenu(ContextMenu menu, View v,
++            ContextMenuInfo menuInfo) {
++        super.onCreateContextMenu(menu, v, menuInfo);
++        menu.add(0, DELETE_ID, 0, R.string.spam_filter_menu_delete);
++    }
++
++    @Override
++    public boolean onContextItemSelected(MenuItem item) {
++        switch(item.getItemId()) {
++            case DELETE_ID:
++                AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
++                mDbHelper.deleteNote(info.id);
++                fillData();
++                return true;
++        }
++        return super.onContextItemSelected(item);
++    }
++
++    private void createNote() {
++        Intent i = new Intent(this, NoteEdit.class);
++        startActivityForResult(i, ACTIVITY_CREATE);
++    }
++
++    @Override
++    protected void onListItemClick(ListView l, View v, int position, long id) {
++        super.onListItemClick(l, v, position, id);
++        Intent i = new Intent(this, NoteEdit.class);
++        i.putExtra(NotesDbAdapter.KEY_ROWID, id);
++        startActivityForResult(i, ACTIVITY_EDIT);
++    }
++
++    @Override
++    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
++        super.onActivityResult(requestCode, resultCode, intent);
++        createHelper();
++        fillData();
++    }
++}
+diff --git a/src/com/fsck/k9/spam_filter/NotesDbAdapter.java b/src/com/fsck/k9/spam_filter/NotesDbAdapter.java
+new file mode 100644
+index 0000000..955ecf5
+--- /dev/null
++++ b/src/com/fsck/k9/spam_filter/NotesDbAdapter.java
+@@ -0,0 +1,209 @@
++/*
++ * Copyright (C) 2008 Google Inc.
++ * 
++ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
++ * use this file except in compliance with the License. You may obtain a copy of
++ * the License at
++ * 
++ * http://www.apache.org/licenses/LICENSE-2.0
++ * 
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
++ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
++ * License for the specific language governing permissions and limitations under
++ * the License.
++ */
++
++package com.fsck.k9.spam_filter;
++
++import android.content.ContentValues;
++import android.content.Context;
++import android.database.Cursor;
++import android.database.SQLException;
++import android.database.sqlite.SQLiteDatabase;
++import android.database.sqlite.SQLiteOpenHelper;
++import android.util.Log;
++
++
++/**
++ * Simple notes database access helper class. Defines the basic CRUD operations
++ * for the notepad example, and gives the ability to list all notes as well as
++ * retrieve or modify a specific note.
++ * 
++ * This has been improved from the first version of this tutorial through the
++ * addition of better error handling and also using returning a Cursor instead
++ * of using a collection of inner classes (which is less scalable and not
++ * recommended).
++ */
++public class NotesDbAdapter {
++
++    public static final String KEY_TITLE = "title";
++
++    public static final String KEY_FROM = "from1";
++    public static final String KEY_SUBJ = "subj";
++    public static final String KEY_HIDE = "_hide";
++    public static final String KEY_DEL = "_del";
++    public static final String KEY_ROWID = "_id";
++
++
++    private static final String TAG = "NotesDbAdapter";
++    private DatabaseHelper mDbHelper;
++    private SQLiteDatabase mDb;
++
++
++
++    /**
++     * Database creation sql statement
++     */
++    private static final String DATABASE_CREATE =
++        "create table notes (_id integer primary key autoincrement, "
++        + "title text not null,"
++        + " from1 text not null, subj text not null, _hide integer, _del integer    );";
++
++    private static final String DATABASE_NAME = "data";
++    private static final String DATABASE_TABLE = "notes";
++    private static final int DATABASE_VERSION = 4;
++
++    private final Context mCtx;
++
++    private static class DatabaseHelper extends SQLiteOpenHelper {
++
++        DatabaseHelper(Context context) {
++            super(context, DATABASE_NAME, null, DATABASE_VERSION);
++        }
++
++        @Override
++        public void onCreate(SQLiteDatabase db) {
++
++            db.execSQL(DATABASE_CREATE);
++        }
++
++        @Override
++        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
++            Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
++                    + newVersion + ", which will destroy all old data");
++            db.execSQL("DROP TABLE IF EXISTS notes");
++            onCreate(db);
++        }
++    }
++
++    /**
++     * Constructor - takes the context to allow the database to be
++     * opened/created
++     * 
++     * @param ctx the Context within which to work
++     */
++    public NotesDbAdapter(Context ctx) {
++        this.mCtx = ctx;
++    }
++
++    /**
++     * Open the notes database. If it cannot be opened, try to create a new
++     * instance of the database. If it cannot be created, throw an exception to
++     * signal the failure
++     * 
++     * @return this (self reference, allowing this to be chained in an
++     *         initialization call)
++     * @throws android.database.SQLException if the database could be neither opened or created
++     */
++    public NotesDbAdapter open() throws SQLException {
++        mDbHelper = new DatabaseHelper(mCtx);
++        mDb = mDbHelper.getWritableDatabase();
++        return this;
++    }
++
++
++
++
++    public void close() {
++        mDbHelper.close();
++    }
++
++
++    /**
++     * Create a new note using the title and body provided. If the note is
++     * successfully created return the new rowId for that note, otherwise return
++     * a -1 to indicate failure.
++     *
++     * @param title the title of the note
++     * @return rowId or -1 if failed
++     */
++    public long createNote(String title,  String from, String subj, long hide, long del) {
++        ContentValues initialValues = new ContentValues();
++        initialValues.put(KEY_TITLE, title);
++
++        initialValues.put(KEY_FROM, from);
++        initialValues.put(KEY_SUBJ, subj);
++        initialValues.put(KEY_HIDE, hide);
++        initialValues.put(KEY_DEL, del);
++
++        return mDb.insert(DATABASE_TABLE, null, initialValues);
++    }
++
++    /**
++     * Delete the note with the given rowId
++     *
++     * @param rowId id of note to delete
++     * @return true if deleted, false otherwise
++     */
++    public boolean deleteNote(long rowId) {
++
++        return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
++    }
++
++    /**
++     * Return a Cursor over the list of all notes in the database
++     *
++     * @return Cursor over all notes
++     */
++    public Cursor fetchAllNotes() {
++
++        mDb.delete(DATABASE_TABLE, KEY_TITLE + " = ?",
++                new String[] {"" });
++
++        return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_TITLE,
++                 KEY_FROM, KEY_SUBJ, KEY_HIDE, KEY_DEL}, null, null, null, null, null);
++
++    }
++
++    /**
++     * Return a Cursor positioned at the note that matches the given rowId
++     *
++     * @param rowId id of note to retrieve
++     * @return Cursor positioned to matching note, if found
++     * @throws android.database.SQLException if note could not be found/retrieved
++     */
++    public Cursor fetchNote(long rowId) throws SQLException {
++
++        Cursor mCursor =
++
++            mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID,
++                    KEY_TITLE, KEY_FROM, KEY_SUBJ, KEY_HIDE, KEY_DEL}, KEY_ROWID + "=" + rowId, null,
++                    null, null, null, null);
++        if (mCursor != null) {
++            mCursor.moveToFirst();
++        }
++        return mCursor;
++
++    }
++
++    /**
++     * Update the note using the details provided. The note to be updated is
++     * specified using the rowId, and it is altered to use the title and body
++     * values passed in
++     * 
++     * @param rowId id of note to update
++     * @param title value to set note title to
++     * @return true if the note was successfully updated, false otherwise
++     */
++    public boolean updateNote(long rowId, String title,  String from, String subj, long hide, long del) {
++        ContentValues args = new ContentValues();
++        args.put(KEY_TITLE, title);
++        args.put(KEY_FROM, from);
++        args.put(KEY_SUBJ, subj);
++        args.put(KEY_HIDE, hide);
++        args.put(KEY_DEL, del);
++
++        return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
++    }
++}
+diff --git a/src/com/fsck/k9/spam_filter/spam_filter_db_helper.java b/src/com/fsck/k9/spam_filter/spam_filter_db_helper.java
+new file mode 100644
+index 0000000..090456d
+--- /dev/null
++++ b/src/com/fsck/k9/spam_filter/spam_filter_db_helper.java
+@@ -0,0 +1,133 @@
++package com.fsck.k9.spam_filter;
++
++import android.content.Context;
++import android.database.Cursor;
++import android.database.sqlite.SQLiteDatabase;
++import android.database.sqlite.SQLiteOpenHelper;
++//import android.util.Log;
++
++//import com.fsck.k9.K9;
++
++/**
++ * Created by AvatarBlueray on 15.02.2015.
++ */
++public class spam_filter_db_helper  extends SQLiteOpenHelper {
++
++    // Logcat tag
++    private static final String LOG = "spam_filter_DatabaseHelper";
++
++    public static final String KEY_TITLE = "title";
++
++    public static final String KEY_FROM = "from1";
++    public static final String KEY_SUBJ = "subj";
++    public static final String KEY_HIDE = "_hide";
++    public static final String KEY_DEL = "_del";
++    public static final String KEY_ROWID = "_id";
++
++    public static final long  ACTION_ALLOW = 0;
++    public static final long  ACTION_HIDE = 1;
++    public static final long  ACTION_HIDENDEL = 2;
++
++    // Database Name
++    private static final String DATABASE_NAME = "data";
++
++    // Table Names
++    private static final String TABLE_NOTES = "notes";
++    private static final int DATABASE_VERSION = 4;
++
++    private static final String DATABASE_CREATE =
++            "create table notes ("+KEY_ROWID+" integer primary key autoincrement, "
++                    + KEY_TITLE + " text not null, "
++                    + KEY_FROM  + " text not null, "
++                    + KEY_SUBJ  + " text not null, "
++                    + KEY_HIDE  + " integer, "
++                    + KEY_DEL   + " integer    );";
++
++    public spam_filter_db_helper(Context context) {
++        super(context, DATABASE_NAME, null, DATABASE_VERSION);
++    }
++
++    @Override
++    public void onCreate(SQLiteDatabase db) {
++        // creating required tables
++        db.execSQL(DATABASE_CREATE);
++    }
++
++    @Override
++    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
++        // on upgrade drop older tables
++        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTES);
++
++        // create new tables
++        onCreate(db);
++    }
++
++    // closing database
++    public void closeDB() {
++        SQLiteDatabase db = this.getReadableDatabase();
++        if (db != null && db.isOpen())
++            db.close();
++    }
++
++    private long getReturnValue(long hide, long del, Cursor c){
++
++        c.close();
++
++        if (del!=0){
++            return   ACTION_HIDENDEL;
++        }else{
++            if (hide != 0){
++                return   ACTION_HIDE;
++            }else{
++                return  ACTION_ALLOW;
++            }
++        }
++
++    }
++    public long checkForSpamGetAction(String from, String subj) {
++
++        String selectQuery = "SELECT  * FROM " + TABLE_NOTES;
++
++       // Log.e(LOG, selectQuery);
++
++        SQLiteDatabase db = this.getReadableDatabase();
++
++        Cursor c = db.rawQuery(selectQuery, null);
++
++        // looping through all rows and adding to list
++        if (c.moveToFirst()) {
++            do {
++
++                String from_t = (c.getString((c.getColumnIndex(KEY_FROM))));
++                String subj_t = (c.getString((c.getColumnIndex(KEY_SUBJ))));
++
++              //  Log.e(K9.LOG_TAG, "check for spam " + from_t + "|"+from + " "+subj_t +"|"+subj );
++
++                long hide = (c.getLong((c.getColumnIndex(KEY_HIDE))));
++                long del = (c.getLong((c.getColumnIndex(KEY_DEL))));
++
++                if ( ! from_t.isEmpty()){
++                    if ( from.matches(from_t) ){
++                        if (! subj_t.isEmpty() ){
++                            if (subj.matches(subj_t)){
++                                return  getReturnValue(hide,del,c);
++                            }
++                        }else{
++                            return  getReturnValue(hide,del,c);
++                        }
++                    }
++                }else{
++                    if (! subj_t.isEmpty()){
++                        if (subj.matches(subj_t)){
++                            return  getReturnValue(hide,del,c);
++                        }
++                    }
++                }
++
++            } while (c.moveToNext());
++        }
++        c.close();
++        return ACTION_ALLOW;
++    }
++
++}
+
+From ef03e3b1003252727a6587a4f3ebbca3d73effe0 Mon Sep 17 00:00:00 2001
+From: Avatar <AvatarBlueray@gmail.com>
+Date: Tue, 17 Feb 2015 23:57:22 +0200
+Subject: [PATCH 2/3] create filter from source, apply filter
+
+---
+ res/layout/note_edit.xml                           |  19 +++-
+ res/layout/notes_row.xml                           |   3 +-
+ res/menu/message_list_item_context.xml             |   7 +-
+ res/menu/message_list_option.xml                   |   5 +
+ res/values/strings.xml                             |   2 +
+ src/com/fsck/k9/activity/MessageList.java          |  14 +++
+ .../fsck/k9/controller/MessagingController.java    |  57 ++++++-----
+ src/com/fsck/k9/fragment/MessageListFragment.java  |  25 +++++
+ src/com/fsck/k9/spam_filter/NoteEdit.java          | 111 ++++++++++++++++++++-
+ 9 files changed, 209 insertions(+), 34 deletions(-)
+
+diff --git a/res/layout/note_edit.xml b/res/layout/note_edit.xml
+index c6d7003..655103f 100644
+--- a/res/layout/note_edit.xml
++++ b/res/layout/note_edit.xml
+@@ -69,16 +69,33 @@
+         android:layout_weight="2" />
+ </LinearLayout>
+ 
++    <LinearLayout
++        android:orientation="vertical"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:gravity="center_vertical"
++        android:layout_weight="3">
++        <Button
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="@string/spam_filter_apply_filter_to_existing_mail"
++            android:id="@+id/apply_filter"
++            android:layout_gravity="center_horizontal"
++            android:gravity="center_vertical" />
++        </LinearLayout>
++
+     <LinearLayout android:orientation="vertical"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_weight="1"
+         android:gravity="center|bottom">
+ 
++
++
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+-            android:text="request at Avatar.blueray@gmail.com"
++            android:text="request at Avatar.Blueray@gmail.com"
+             android:id="@+id/textView"
+             android:textSize="20dp"
+             android:textAlignment="center" />
+diff --git a/res/layout/notes_row.xml b/res/layout/notes_row.xml
+index bd92bd5..219eeb5 100644
+--- a/res/layout/notes_row.xml
++++ b/res/layout/notes_row.xml
+@@ -2,4 +2,5 @@
+ <TextView android:id="@+id/text1" xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+-    android:textSize="30dp" />
++    android:textSize="20dp"
++    android:minHeight="25dp" />
+diff --git a/res/menu/message_list_item_context.xml b/res/menu/message_list_item_context.xml
+index 4de1f88..6243af7 100644
+--- a/res/menu/message_list_item_context.xml
++++ b/res/menu/message_list_item_context.xml
+@@ -9,8 +9,11 @@
+          android:id="@+id/reply_all"
+          android:title="@string/reply_all_action"/>
+      <item
+-         android:id="@+id/reply"
+-         android:title="@string/reply_action"/>
++    android:id="@+id/reply"
++    android:title="@string/reply_action"/>
++    <item
++        android:id="@+id/configure_spam_filter_from_source"
++        android:title="@string/spam_filter_configure_spam_filter_from_source"/>
+      <item
+          android:id="@+id/send_again"
+          android:title="@string/send_again_action"/>
+diff --git a/res/menu/message_list_option.xml b/res/menu/message_list_option.xml
+index 9e020ff..fec2938 100644
+--- a/res/menu/message_list_option.xml
++++ b/res/menu/message_list_option.xml
+@@ -226,6 +226,11 @@
+         android:id="@+id/show_folder_list"
+         android:showAsAction="never"
+         android:title="@string/folders_title" />
++    <item
++        android:id="@+id/configure_spam_filter"
++        android:showAsAction="never"
++        android:title="@string/spam_filter_action" />
++
+     <!-- always -->
+     <item
+         android:id="@+id/settings"
+diff --git a/res/values/strings.xml b/res/values/strings.xml
+index 3d09945..bf24fce 100644
+--- a/res/values/strings.xml
++++ b/res/values/strings.xml
+@@ -1144,6 +1144,8 @@ Please submit bug reports, contribute new features and ask questions at
+     <string name="spam_filter_confirm">Confirm</string>
+     <string name="spam_filter_edit_filter">Edit Filter</string>
+     <string name="spam_filter_action">Configure Spam Filter</string>
++    <string name="spam_filter_apply_filter_to_existing_mail">Apply filter to existing mail</string>
++    <string name="spam_filter_configure_spam_filter_from_source">Configure Spam Filter From Mail</string>
+     <string name="spam_filter_request">Request at Avatar.Blueray@gmail.com
+     donation BTC copy wallet to clipboard</string>
+ </resources>
+diff --git a/src/com/fsck/k9/activity/MessageList.java b/src/com/fsck/k9/activity/MessageList.java
+index 3da2060..9ce38ee 100644
+--- a/src/com/fsck/k9/activity/MessageList.java
++++ b/src/com/fsck/k9/activity/MessageList.java
+@@ -747,6 +747,11 @@ private void onEditPrefs() {
+         Prefs.actionPrefs(this);
+     }
+ 
++    private void onSpamfilter() {
++        Intent i = new Intent(this, com.fsck.k9.spam_filter.Notepadv3.class);
++        startActivityForResult(i, 0);
++    }
++
+     private void onEditAccount() {
+         AccountSettings.actionSettings(this, mAccount);
+     }
+@@ -809,6 +814,10 @@ public boolean onOptionsItemSelected(MenuItem item) {
+                 mMessageListFragment.selectAll();
+                 return true;
+             }
++            case R.id.configure_spam_filter: {
++                onSpamfilter();
++                return true;
++            }
+             case R.id.app_settings: {
+                 onEditPrefs();
+                 return true;
+@@ -850,6 +859,11 @@ public boolean onOptionsItemSelected(MenuItem item) {
+                 mMessageViewFragment.onReply();
+                 return true;
+             }
++            /*case R.id.configure_spam_filter_from_source: {
++
++                Log.e(K9.LOG_TAG, "configure_spam_filter_from_source");
++                return true;
++            }*/
+             case R.id.reply_all: {
+                 mMessageViewFragment.onReplyAll();
+                 return true;
+diff --git a/src/com/fsck/k9/controller/MessagingController.java b/src/com/fsck/k9/controller/MessagingController.java
+index 0719014..c6d82d8 100644
+--- a/src/com/fsck/k9/controller/MessagingController.java
++++ b/src/com/fsck/k9/controller/MessagingController.java
+@@ -4621,6 +4621,34 @@ private boolean shouldNotifyForMessage(Account account, LocalFolder localFolder,
+             return false;
+         }
+ 
++        String subj = message.getSubject();
++
++        Log.e(K9.LOG_TAG, "subj is  " + subj);
++
++
++        Address[] address = message.getFrom();
++
++        for (Address adr:address){
++            String from = adr.getAddress();
++
++            // Log.e(K9.LOG_TAG, "subj from  is  " + subj+ "  "+ from);
++
++            long result = checkForSpam(from,subj);
++
++            if (result == spam_filter_db_helper.ACTION_HIDE ){
++                // Log.e(K9.LOG_TAG, "action hide  " );
++                return  false;
++            }
++
++            if (result == spam_filter_db_helper.ACTION_HIDENDEL ){
++                // Log.e(K9.LOG_TAG, "action del  " );
++
++                deleteMessages(Collections.singletonList(localmessage), null);
++                return  false;
++            }
++
++        }
++
+         // Do not notify if the user does not have notifications enabled or if the message has
+         // been read.
+         if (!account.isNotifyNewMail() || message.isSet(Flag.SEEN)) {
+@@ -4683,35 +4711,6 @@ private boolean shouldNotifyForMessage(Account account, LocalFolder localFolder,
+             return false;
+         }
+ 
+-        String subj = message.getSubject();
+-
+-        Log.e(K9.LOG_TAG, "subj is  " + subj);
+-
+-
+-        Address[] address = message.getFrom();
+-
+-        for (Address adr:address){
+-            String from = adr.getAddress();
+-
+-           // Log.e(K9.LOG_TAG, "subj from  is  " + subj+ "  "+ from);
+-
+-            long result = checkForSpam(from,subj);
+-
+-            if (result == spam_filter_db_helper.ACTION_HIDE ){
+-               // Log.e(K9.LOG_TAG, "action hide  " );
+-                return  false;
+-            }
+-
+-            if (result == spam_filter_db_helper.ACTION_HIDENDEL ){
+-              // Log.e(K9.LOG_TAG, "action del  " );
+-
+-                  deleteMessages(Collections.singletonList(localmessage), null);
+-                return  false;
+-            }
+-
+-        }
+-
+-
+         return true;
+     }
+ 
+diff --git a/src/com/fsck/k9/fragment/MessageListFragment.java b/src/com/fsck/k9/fragment/MessageListFragment.java
+index 3648e8f..4f34182 100644
+--- a/src/com/fsck/k9/fragment/MessageListFragment.java
++++ b/src/com/fsck/k9/fragment/MessageListFragment.java
+@@ -100,6 +100,8 @@
+ import com.fsck.k9.search.SearchSpecification.SearchCondition;
+ import com.fsck.k9.search.SearchSpecification.Searchfield;
+ import com.fsck.k9.search.SqlQueryBuilder;
++import com.fsck.k9.spam_filter.NoteEdit;
++import com.fsck.k9.spam_filter.NotesDbAdapter;
+ import com.handmark.pulltorefresh.library.ILoadingLayout;
+ import com.handmark.pulltorefresh.library.PullToRefreshBase;
+ import com.handmark.pulltorefresh.library.PullToRefreshListView;
+@@ -1513,6 +1515,29 @@ public boolean onContextItemSelected(android.view.MenuItem item) {
+                 onReply(message);
+                 break;
+             }
++            case R.id.configure_spam_filter_from_source: {
++                Message message = getMessageAtPosition(adapterPosition);
++                String subj = message.getSubject();
++                Address[] address = message.getFrom();
++                Address adr_t = null;
++                for (Address adr:address){
++                    adr_t = adr;
++                }
++
++                String from  = "";
++                if ( adr_t != null ) {
++                    from = adr_t.getAddress();
++                }
++
++
++                Intent i = new Intent(mContext, NoteEdit.class);
++                i.putExtra(NotesDbAdapter.KEY_SUBJ, subj);
++                i.putExtra(NotesDbAdapter.KEY_FROM, from);
++                startActivityForResult(i, 1);
++
++                break;
++            }
++
+             case R.id.reply_all: {
+                 Message message = getMessageAtPosition(adapterPosition);
+                 onReplyAll(message);
+diff --git a/src/com/fsck/k9/spam_filter/NoteEdit.java b/src/com/fsck/k9/spam_filter/NoteEdit.java
+index 15b5e63..b1b3093 100644
+--- a/src/com/fsck/k9/spam_filter/NoteEdit.java
++++ b/src/com/fsck/k9/spam_filter/NoteEdit.java
+@@ -27,8 +27,20 @@
+ import android.widget.CheckBox;
+ import android.widget.EditText;
+ 
++import com.fsck.k9.Account;
+ import com.fsck.k9.K9;
++import com.fsck.k9.Preferences;
+ import com.fsck.k9.R;
++import com.fsck.k9.controller.MessageRetrievalListener;
++import com.fsck.k9.controller.MessagingController;
++import com.fsck.k9.mail.Address;
++import com.fsck.k9.mail.Message;
++import com.fsck.k9.mail.store.LocalStore;
++import com.fsck.k9.mail.store.LocalStore.LocalMessage;
++import com.fsck.k9.search.LocalSearch;
++
++import java.util.Collections;
++import java.util.List;
+ 
+ public class NoteEdit extends Activity {
+ 
+@@ -58,6 +70,7 @@ protected void onCreate(Bundle savedInstanceState) {
+ 
+         Button confirmButton = (Button) findViewById(R.id.confirm);
+         Button donteButton = (Button) findViewById(R.id.donate);
++        Button applyfilterButton = (Button) findViewById(R.id.apply_filter);
+ 
+ 
+         mRowId = (savedInstanceState == null) ? null :
+@@ -66,8 +79,18 @@ protected void onCreate(Bundle savedInstanceState) {
+ 			Bundle extras = getIntent().getExtras();
+ 			mRowId = extras != null ? extras.getLong(NotesDbAdapter.KEY_ROWID)
+ 									: null;
++
++
++            mTitleText.setText(extras != null ? extras.getString(NotesDbAdapter.KEY_FROM,""): "");
++            mFromText.setText(extras != null ? extras.getString(NotesDbAdapter.KEY_FROM,""): "");
++            mSubjText.setText(extras != null ? extras.getString(NotesDbAdapter.KEY_SUBJ,""): "");
+ 		}
+ 
++
++        if (mRowId == 0){
++            mRowId = null;
++        }
++
+ 		populateFields();
+ 
+         confirmButton.setOnClickListener(new View.OnClickListener() {
+@@ -79,6 +102,14 @@ public void onClick(View view) {
+ 
+         });
+ 
++        applyfilterButton.setOnClickListener(new View.OnClickListener() {
++
++            public void onClick(View view) {
++                applyfilter();
++            }
++
++        });
++
+         donteButton.setOnClickListener(new View.OnClickListener() {
+ 
+             public void onClick(View view) {
+@@ -91,6 +122,84 @@ public void onClick(View view) {
+         });
+     }
+ 
++    private void applyfilter(){
++
++        if (!mDelCb.isChecked())
++            return;
++
++        final String from_t = mFromText.getText().toString();
++        final String subj_t = mSubjText.getText().toString();
++
++         final MessagingController controller = MessagingController.getInstance(getApplication());
++
++
++
++        Account[] accounts = Preferences.getPreferences(getApplicationContext()).getAccounts();
++        for (final Account account : accounts) {
++            // Collecting statistics of the search result
++
++            MessageRetrievalListener retrievalListener = new MessageRetrievalListener() {
++
++
++                @Override
++                public void messageStarted(String uid, int number, int ofTotal) {
++
++                }
++
++                @Override
++                public void messageFinished(Message message, int number, int ofTotal) {
++                    String subj = message.getSubject();
++                    Address[] address = message.getFrom();
++                    String from = "";
++                    for (Address adr : address) {
++                        from = adr.getAddress();
++                    }
++                    boolean delete = false;
++
++                    if (!from_t.isEmpty() && from.matches(from_t)) {
++
++                        if (!subj_t.isEmpty()) {
++                            if (subj.matches(subj_t)) {
++                                delete = true;
++                            }
++                        } else {
++                            delete = true;
++                        }
++
++                    } else {
++                        if (!subj_t.isEmpty() && subj.matches(subj_t))
++                            delete = true;
++                    }
++
++
++                    if (delete) {
++                      //  Log.e(K9.LOG_TAG, "delete  " + message.getSubject());
++                        controller.deleteMessages(Collections.singletonList(message), null);
++                    }
++
++                }
++
++                @Override
++                public void messagesFinished(int total) {
++
++                }
++            };
++
++
++            // build and do the query in the localstore
++            try {
++                LocalStore localStore = account.getLocalStore();
++                LocalSearch tmpSearch = new LocalSearch();
++                localStore.searchForMessages(retrievalListener, tmpSearch);
++            } catch (Exception e) {
++                Log.e(K9.LOG_TAG, "some happins  " + e.toString());
++
++            }
++        }
++
++
++    }
++
+     private void createHelper(){
+         if (mDbHelper == null){
+             mDbHelper = new NotesDbAdapter(this);
+@@ -99,7 +208,7 @@ private void createHelper(){
+     }
+ 
+     private void populateFields() {
+-        if (mRowId != null) {
++        if (mRowId != null ) {
+             Cursor note = mDbHelper.fetchNote(mRowId);
+             startManagingCursor(note);
+             mTitleText.setText(note.getString(
+
+From 47fc24b68b881a720842c9f1bc294b9365096370 Mon Sep 17 00:00:00 2001
+From: Avatar <AvatarBlueray@gmail.com>
+Date: Sun, 15 Mar 2015 11:09:40 +0200
+Subject: [PATCH 3/3] nullPointer exception fix
+
+nullPointer exception fix
+---
+ src/com/fsck/k9/spam_filter/NoteEdit.java | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/com/fsck/k9/spam_filter/NoteEdit.java b/src/com/fsck/k9/spam_filter/NoteEdit.java
+index b1b3093..aad2e46 100644
+--- a/src/com/fsck/k9/spam_filter/NoteEdit.java
++++ b/src/com/fsck/k9/spam_filter/NoteEdit.java
+@@ -87,8 +87,10 @@ protected void onCreate(Bundle savedInstanceState) {
+ 		}
+ 
+ 
+-        if (mRowId == 0){
+-            mRowId = null;
++        if (mRowId != null){
++            if (mRowId == 0){
++                mRowId = null;
++            }
+         }
+ 
+ 		populateFields();
